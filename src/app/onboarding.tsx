@@ -14,35 +14,36 @@ export default function Onboarding() {
   const [_, setIsFirstTime] = useIsFirstTime();
   const router = useRouter();
   return (
-    <View className="flex h-full items-center  justify-center">
+    <View className="flex h-full items-center justify-center">
       <FocusAwareStatusBar />
       <View className="w-full flex-1">
         <Cover />
       </View>
-      <View className="justify-end ">
-        <Text className="my-3 text-center text-5xl font-bold">
-          Obytes Starter
-        </Text>
+      <View className="justify-end">
+        <Text className="my-3 text-center text-5xl font-bold">AI PRES</Text>
         <Text className="mb-2 text-center text-lg text-gray-600">
-          The right way to build your mobile app
+          Smarter property management at your fingertips
         </Text>
 
         <Text className="my-1 pt-6 text-left text-lg">
-          🚀 Production-ready{' '}
+          🏢 Manage properties, floors & units easily
         </Text>
         <Text className="my-1 text-left text-lg">
-          🥷 Developer experience + Productivity
+          👥 Seamless tenant management & rent tracking
         </Text>
         <Text className="my-1 text-left text-lg">
-          🧩 Minimal code and dependencies
+          🤖 AI-powered rent evaluation & suggestions
         </Text>
         <Text className="my-1 text-left text-lg">
-          💪 well maintained third-party libraries
+          📊 Instant reports on rent, expenses & profit
+        </Text>
+        <Text className="my-1 text-left text-lg">
+          💬 Get instant support with our AI chatbot
         </Text>
       </View>
       <SafeAreaView className="mt-6">
         <Button
-          label="Let's Get Started "
+          label="Start Managing Now"
           onPress={() => {
             setIsFirstTime(false);
             router.replace('/login');

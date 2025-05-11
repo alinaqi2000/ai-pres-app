@@ -1,7 +1,9 @@
 import { cssInterop } from 'nativewind';
 import Svg from 'react-native-svg';
 
+export * from './avatar';
 export * from './button';
+export * from './card';
 export * from './checkbox';
 export { default as colors } from './colors';
 export * from './focus-aware-status-bar';

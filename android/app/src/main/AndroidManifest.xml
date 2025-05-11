@@ -24,7 +24,7 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="aipres-app"/>
+        <data android:scheme="ai-pres-app"/>
         <data android:scheme="com.aipres.app.development"/>
         <data android:scheme="exp+obytesapp"/>
       </intent-filter>

@@ -1,35 +1,37 @@
-import { FlashList } from '@shopify/flash-list';
-import React from 'react';
+/* eslint-disable react/no-unstable-nested-components */
+import { Redirect, SplashScreen } from 'expo-router';
+import React, { useCallback, useEffect } from 'react';
 
-import type { Post } from '@/api';
-import { usePosts } from '@/api';
-import { Card } from '@/components/card';
-import { EmptyList, FocusAwareStatusBar, Text, View } from '@/components/ui';
+import { SelectRoleForm } from '@/components/auth/select-role';
+import { FocusAwareStatusBar, View } from '@/components/ui';
+import { useAuth } from '@/lib';
+import { useIsFirstTime } from '@/lib';
 
 export default function Feed() {
-  const { data, isPending, isError } = usePosts();
-  const renderItem = React.useCallback(
-    ({ item }: { item: Post }) => <Card {...item} />,
-    []
-  );
+  const status = useAuth.use.status();
+  const [isFirstTime] = useIsFirstTime();
+  const hideSplash = useCallback(async () => {
+    await SplashScreen.hideAsync();
+  }, []);
+  useEffect(() => {
+    if (status !== 'idle') {
+      setTimeout(() => {
+        hideSplash();
+      }, 1000);
+    }
+  }, [hideSplash, status]);
 
-  if (isError) {
-    return (
-      <View>
-        <Text> Error Loading data </Text>
-      </View>
-    );
+  if (isFirstTime) {
+    return <Redirect href="/onboarding" />;
   }
+  if (status === 'signOut') {
+    return <Redirect href="/login" />;
+  }
+
   return (
-    <View className="flex-1 ">
+    <View className="flex-1">
       <FocusAwareStatusBar />
-      <FlashList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(_, index) => `item-${index}`}
-        ListEmptyComponent={<EmptyList isLoading={isPending} />}
-        estimatedItemSize={300}
-      />
+      <SelectRoleForm />
     </View>
   );
 }

@@ -1,17 +1,18 @@
 /* eslint-disable react/no-unstable-nested-components */
-import { Link, Redirect, SplashScreen, Tabs } from 'expo-router';
+import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import React, { useCallback, useEffect } from 'react';
+import { Avatar } from 'react-native-paper';
 
-import { Pressable, Text } from '@/components/ui';
+import { colors } from '@/components/ui';
 import {
-  Feed as FeedIcon,
-  Settings as SettingsIcon,
-  Style as StyleIcon,
+  Dashboard as DashboardIcon,
+  Finance as FinanceIcon,
 } from '@/components/ui/icons';
 import { useAuth, useIsFirstTime } from '@/lib';
 
 export default function TabLayout() {
   const status = useAuth.use.status();
+  const user = useAuth.use.user();
   const [isFirstTime] = useIsFirstTime();
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
@@ -35,19 +36,19 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Feed',
-          tabBarIcon: ({ color }) => <FeedIcon color={color} />,
-          headerRight: () => <CreateNewPostLink />,
-          tabBarButtonTestID: 'feed-tab',
+          title: 'Dashboard',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <DashboardIcon color={color} />,
+          tabBarButtonTestID: 'dashboard-tab',
         }}
       />
 
       <Tabs.Screen
-        name="style"
+        name="finance"
         options={{
-          title: 'Style',
+          title: 'Finance',
           headerShown: false,
-          tabBarIcon: ({ color }) => <StyleIcon color={color} />,
+          tabBarIcon: ({ color }) => <FinanceIcon color={color} />,
           tabBarButtonTestID: 'style-tab',
         }}
       />
@@ -56,20 +57,20 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           headerShown: false,
-          tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
+          // eslint-disable-next-line unused-imports/no-unused-vars
+          tabBarIcon: ({ color }) => (
+            <Avatar.Text
+              style={{ backgroundColor: colors.primary[200] }}
+              labelStyle={{
+                color: colors.primary[900],
+              }}
+              label={user?.name?.[0] || 'S'}
+              size={24}
+            />
+          ),
           tabBarButtonTestID: 'settings-tab',
         }}
       />
     </Tabs>
   );
 }
-
-const CreateNewPostLink = () => {
-  return (
-    <Link href="/feed/add-post" asChild>
-      <Pressable>
-        <Text className="px-3 text-primary-300">Create</Text>
-      </Pressable>
-    </Link>
-  );
-};

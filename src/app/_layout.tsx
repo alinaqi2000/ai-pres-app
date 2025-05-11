@@ -10,6 +10,7 @@ import { StyleSheet } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { PaperProvider } from 'react-native-paper';
 
 import { APIProvider } from '@/api';
 import { hydrateAuth, loadSelectedTheme } from '@/lib';
@@ -21,7 +22,6 @@ export const unstable_settings = {
   initialRouteName: '(app)',
 };
 
-hydrateAuth();
 loadSelectedTheme();
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,12 +32,23 @@ SplashScreen.setOptions({
 });
 
 export default function RootLayout() {
+  React.useEffect(() => {
+    const load = async () => {
+      await hydrateAuth();
+    };
+    load();
+  }, []);
   return (
     <Providers>
       <Stack>
-        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="reset-password" options={{ headerShown: false }} />
+        <Stack.Screen name="signup" options={{ headerShown: false }} />
+        <Stack.Screen name="select-role" options={{ headerShown: false }} />
+        <Stack.Screen name="owner" options={{ headerShown: false }} />
+        <Stack.Screen name="settings/change-password" />
       </Stack>
     </Providers>
   );
@@ -52,12 +63,31 @@ function Providers({ children }: { children: React.ReactNode }) {
     >
       <KeyboardProvider>
         <ThemeProvider value={theme}>
-          <APIProvider>
-            <BottomSheetModalProvider>
-              {children}
-              <FlashMessage position="top" />
-            </BottomSheetModalProvider>
-          </APIProvider>
+          <PaperProvider
+            theme={{
+              colors: {
+                primary: theme.colors.primary,
+                background: theme.colors.background,
+                surface: theme.colors.background,
+                accent: theme.colors.primary,
+                error: theme.colors.primary,
+                text: theme.colors.text,
+                onSurface: theme.colors.text,
+                disabled: theme.colors.border,
+                placeholder: theme.colors.border,
+                backdrop: theme.colors.background,
+                notification: theme.colors.primary,
+              },
+              dark: theme.dark,
+            }}
+          >
+            <APIProvider>
+              <BottomSheetModalProvider>
+                {children}
+                <FlashMessage position="top" />
+              </BottomSheetModalProvider>
+            </APIProvider>
+          </PaperProvider>
         </ThemeProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>

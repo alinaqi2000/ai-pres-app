@@ -27,7 +27,8 @@
     },
     "title": "Settings",
     "version": "Version",
-    "website": "Website"
+    "website": "Website",
+    "change_password": "Change Password"
   },
   "welcome": "Welcome to obytes app site"
 }

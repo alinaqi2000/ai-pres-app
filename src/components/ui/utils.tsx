@@ -26,7 +26,19 @@ export const showErrorMessage = (message: string = 'Something went wrong ') => {
   showMessage({
     message,
     type: 'danger',
+    position: 'bottom',
     duration: 4000,
+    icon: 'danger',
+  });
+};
+
+export const showSuccessMessage = (message: string = 'Success') => {
+  showMessage({
+    message,
+    type: 'success',
+    position: 'bottom',
+    duration: 4000,
+    icon: 'success',
   });
 };
 

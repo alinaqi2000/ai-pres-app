@@ -36,10 +36,10 @@ require('dotenv').config({
 
 const BUNDLE_ID = 'com.aipres.app'; // ios bundle id
 const PACKAGE = 'com.aipres.app'; // android package name
-const NAME = 'AI Rental'; // app name
+const NAME = 'AI PRES'; // app name
 const EXPO_ACCOUNT_OWNER = 'expo-owner'; // expo account owner
 const EAS_PROJECT_ID = 'c3e1075b-6fe7-4686-aa49-35b46a229044'; // eas project id
-const SCHEME = 'aipres-app'; // app scheme
+const SCHEME = 'ai-pres-app'; // app scheme
 
 /**
  * We declare a function withEnvSuffix that will add a suffix to the variable name based on the APP_ENV
