@@ -7,7 +7,7 @@ import { FocusAwareStatusBar, View } from '@/components/ui';
 import { useAuth } from '@/lib';
 import { useIsFirstTime } from '@/lib';
 
-export default function Feed() {
+export default function SelectRole() {
   const status = useAuth.use.status();
   const [isFirstTime] = useIsFirstTime();
   const hideSplash = useCallback(async () => {

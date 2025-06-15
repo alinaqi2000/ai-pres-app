@@ -52,5 +52,3 @@ export const Avatar = React.forwardRef<View, Props>(
     );
   }
 );
-
-Avatar.displayName = 'Avatar';

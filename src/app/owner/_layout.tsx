@@ -1,18 +1,18 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import React, { useCallback, useEffect } from 'react';
-import { Avatar } from 'react-native-paper';
 
-import { colors } from '@/components/ui';
 import {
   Dashboard as DashboardIcon,
   Finance as FinanceIcon,
+  Settings as SettingsIcon,
 } from '@/components/ui/icons';
 import { useAuth, useIsFirstTime } from '@/lib';
 
+// eslint-disable-next-line max-lines-per-function
 export default function TabLayout() {
   const status = useAuth.use.status();
-  const user = useAuth.use.user();
+  // const user = useAuth.use.user();
   const [isFirstTime] = useIsFirstTime();
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
@@ -32,13 +32,25 @@ export default function TabLayout() {
     return <Redirect href="/login" />;
   }
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          height: 64,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          paddingVertical: 4,
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Dashboard',
           headerShown: false,
-          tabBarIcon: ({ color }) => <DashboardIcon color={color} />,
+          tabBarIcon: ({ color }) => (
+            <DashboardIcon width={36} height={36} color={color} />
+          ),
           tabBarButtonTestID: 'dashboard-tab',
         }}
       />
@@ -48,7 +60,9 @@ export default function TabLayout() {
         options={{
           title: 'Finance',
           headerShown: false,
-          tabBarIcon: ({ color }) => <FinanceIcon color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FinanceIcon width={36} height={36} color={color} />
+          ),
           tabBarButtonTestID: 'style-tab',
         }}
       />
@@ -57,15 +71,12 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           headerShown: false,
-          // eslint-disable-next-line unused-imports/no-unused-vars
           tabBarIcon: ({ color }) => (
-            <Avatar.Text
-              style={{ backgroundColor: colors.primary[200] }}
-              labelStyle={{
-                color: colors.primary[900],
-              }}
-              label={user?.name?.[0] || 'S'}
-              size={24}
+            <SettingsIcon
+              width={36}
+              height={36}
+              style={{ marginTop: 8 }}
+              color={color}
             />
           ),
           tabBarButtonTestID: 'settings-tab',

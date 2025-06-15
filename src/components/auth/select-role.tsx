@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { Image, Text, View } from '@/components/ui';
+import { Card, Image, Text, View } from '@/components/ui';
 import { useAuth } from '@/lib';
 
 import { Logo } from '../logo';
@@ -21,14 +21,14 @@ export const SelectRoleForm = () => {
         >
           Select a role to continue
         </Text>
-        <View className="mt-10 flex-row items-center justify-center gap-12">
+        <View className="mt-10 flex-row items-center justify-center gap-4">
           <TouchableOpacity
             onPress={() => {
               setRole('owner');
               router.replace('/owner');
             }}
           >
-            <View className="flex-col items-center gap-3 rounded-lg px-9 py-7 shadow-lg dark:shadow-gray-800/50">
+            <Card className="flex-col items-center gap-3 rounded-lg px-12 py-9 shadow-lg dark:shadow-gray-800/50">
               <Image
                 className="size-20"
                 placeholder="Landlord"
@@ -36,15 +36,15 @@ export const SelectRoleForm = () => {
                 source={require('@/../assets/icons/home.svg')}
               />
               <Text className="text-lg font-bold">Owner</Text>
-            </View>
+            </Card>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setRole('tenant');
-              router.replace('/');
+              router.replace('/tenant');
             }}
           >
-            <View className="flex-col items-center gap-3 rounded-lg px-9 py-7 shadow-lg dark:shadow-gray-800/50">
+            <Card className="flex-col items-center gap-3 rounded-lg px-12 py-9 shadow-lg dark:shadow-gray-800/50">
               <Image
                 className="size-20"
                 placeholder="Tenant"
@@ -52,10 +52,10 @@ export const SelectRoleForm = () => {
                 source={require('@/../assets/icons/people.svg')}
               />
               <Text className="text-lg font-bold">Tenant</Text>
-            </View>
+            </Card>
           </TouchableOpacity>
           {/* <TouchableOpacity onPress={() => router.replace('/admin')}>
-              <View className="flex-row items-center gap-2 rounded-lg px-9 pyx-8 py-6 shadow-lg dark:shadow-gray-800/50">
+              <View className="flex-row items-center gap-2 rounded-lg px-9 pyx-8 py-6 shadow-sm dark:shadow-gray-800/50">
                 <Image
                   className="size-6"
                   source={require('@/../assets/icons/home.svg')}

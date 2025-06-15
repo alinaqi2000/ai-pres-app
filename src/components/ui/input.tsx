@@ -49,15 +49,16 @@ const inputTv = tv({
 
 export interface NInputProps extends TextInputProps {
   label?: string;
+  formatValue?: (value: string) => string;
   disabled?: boolean;
   error?: string;
 }
 
 type TRule<T extends FieldValues> =
   | Omit<
-      RegisterOptions<T>,
-      'disabled' | 'valueAsNumber' | 'valueAsDate' | 'setValueAs'
-    >
+    RegisterOptions<T>,
+    'disabled' | 'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+  >
   | undefined;
 
 export type RuleType<T extends FieldValues> = { [name in keyof T]: TRule<T> };
@@ -69,10 +70,10 @@ export type InputControllerType<T extends FieldValues> = {
 
 interface ControlledInputProps<T extends FieldValues>
   extends NInputProps,
-    InputControllerType<T> {}
+  InputControllerType<T> { }
 
 export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
-  const { label, error, testID, ...inputProps } = props;
+  const { label, error, testID, formatValue, ...inputProps } = props;
   const [isFocussed, setIsFocussed] = React.useState(false);
   const onBlur = React.useCallback(() => setIsFocussed(false), []);
   const onFocus = React.useCallback(() => setIsFocussed(true), []);
@@ -105,6 +106,7 @@ export const Input = React.forwardRef<NTextInput, NInputProps>((props, ref) => {
         onBlur={onBlur}
         onFocus={onFocus}
         {...inputProps}
+        value={formatValue ? formatValue(inputProps.value || '') : inputProps.value}
         style={StyleSheet.flatten([
           { writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' },
           { textAlign: I18nManager.isRTL ? 'right' : 'left' },

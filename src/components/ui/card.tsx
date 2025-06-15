@@ -20,12 +20,12 @@ const card = tv({
     },
   },
 
-defaultVariants: {
-  variant: 'default',
-},
+  defaultVariants: {
+    variant: 'default',
+  },
 });
 
-interface CardVariants extends VariantProps<typeof card> {}
+interface CardVariants extends VariantProps<typeof card> { }
 
 interface Props {
   children: React.ReactNode;
@@ -39,15 +39,9 @@ export const Card = React.forwardRef<View, Props>(
     const { container } = card({ variant });
 
     return (
-      <View
-        ref={ref}
-        className={`${container} ${className}`}
-        style={style}
-      >
+      <View ref={ref} className={`${container} ${className}`} style={style}>
         {children}
       </View>
     );
-  },
+  }
 );
-
-Card.displayName = 'Card';

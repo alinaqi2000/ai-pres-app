@@ -7,6 +7,7 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
 import { Button, ControlledInput, Select, Text, View } from '@/components/ui';
+import { CITIES } from '@/data/cities';
 
 import { Logo } from '../logo';
 
@@ -73,28 +74,7 @@ export const SignUpForm = ({
         <Select
           label="City"
           value={city}
-          options={[
-            { label: 'Karachi', value: 'karachi' },
-            { label: 'Lahore', value: 'lahore' },
-            { label: 'Islamabad', value: 'islamabad' },
-            { label: 'Rawalpindi', value: 'rawalpindi' },
-            { label: 'Faisalabad', value: 'faisalabad' },
-            { label: 'Multan', value: 'multan' },
-            { label: 'Peshawar', value: 'peshawar' },
-            { label: 'Quetta', value: 'quetta' },
-            { label: 'Sialkot', value: 'sialkot' },
-            { label: 'Gujranwala', value: 'gujranwala' },
-            { label: 'Bahawalpur', value: 'bahawalpur' },
-            { label: 'Sargodha', value: 'sargodha' },
-            { label: 'Hyderabad', value: 'hyderabad' },
-            { label: 'Sukkur', value: 'sukkur' },
-            { label: 'Abbottabad', value: 'abbottabad' },
-            { label: 'Mardan', value: 'mardan' },
-            { label: 'Rahim Yar Khan', value: 'rahim-yar-khan' },
-            { label: 'Sheikhupura', value: 'sheikhupura' },
-            { label: 'Gujrat', value: 'gujrat' },
-            { label: 'Jhelum', value: 'jhelum' },
-          ]}
+          options={CITIES}
           onSelect={(value) => {
             setCity(value);
             setValue('city', value as string);

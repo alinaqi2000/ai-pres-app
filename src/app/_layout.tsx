@@ -42,13 +42,86 @@ export default function RootLayout() {
     <Providers>
       <Stack>
         <Stack.Screen name="(app)/index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="properties/manage/create"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="properties/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="properties/manage/upload-property-image"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="properties/manage/manage-floors"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="properties/manage/manage-units"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="properties/manage/create-unit"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="tenants/index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="tenants/manage/create"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tenants/booking/create-booking"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tenants/manage/select-item"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tenants/profile/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tenants/booking/detail"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tenants/invoice/detail"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="bookings/owner/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="bookings/tenant/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="invoices/tenant/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="invoices/payment/create"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="feed/property/detail"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="reset-password" options={{ headerShown: false }} />
         <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="select-role" options={{ headerShown: false }} />
         <Stack.Screen name="owner" options={{ headerShown: false }} />
-        <Stack.Screen name="settings/change-password" />
+        <Stack.Screen name="tenant" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="settings/change-password"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </Providers>
   );

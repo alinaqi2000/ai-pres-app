@@ -1,12 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Stack } from 'expo-router';
+import { type AxiosError } from 'axios';
+import { useRouter } from 'expo-router';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { AxiosError } from 'axios';
-import { ErrorResponse } from '@/api/common/types';
 
 import { useChangePassword } from '@/api/auth/user-auth';
+import { type ErrorResponse } from '@/api/common/types';
+import HeadBar from '@/components/head-bar';
 import {
   Button,
   ControlledInput,
@@ -15,8 +16,7 @@ import {
   View,
 } from '@/components/ui';
 import { useAuth } from '@/lib';
-import { TokenType } from '@/lib/auth/utils';
-import { useRouter } from 'expo-router';
+import { type TokenType } from '@/lib/auth/utils';
 
 const schema = z
   .object({
@@ -59,14 +59,9 @@ export default function ChangePassword() {
     );
   };
   return (
-    <>
-      <Stack.Screen
-        options={{
-          title: 'Change Password',
-          headerBackTitle: 'Settings',
-        }}
-      />
-      <View className="flex-1 p-4 ">
+    <View className="flex-1 gap-4">
+      <HeadBar title="Change Password" />
+      <View className="flex-1 p-4">
         <ControlledInput
           name="current_password"
           label="Current Password"
@@ -92,6 +87,6 @@ export default function ChangePassword() {
           testID="change-password-button"
         />
       </View>
-    </>
+    </View>
   );
 }

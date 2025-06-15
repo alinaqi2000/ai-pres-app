@@ -1,6 +1,11 @@
 import React from 'react';
 import type { PressableProps, View } from 'react-native';
-import { ActivityIndicator, Pressable, Text } from 'react-native';
+import {
+  ActivityIndicator,
+  Pressable,
+  Text,
+  View as ViewBase,
+} from 'react-native';
 import type { VariantProps } from 'tailwind-variants';
 import { tv } from 'tailwind-variants';
 
@@ -87,6 +92,7 @@ const button = tv({
 type ButtonVariants = VariantProps<typeof button>;
 interface Props extends ButtonVariants, Omit<PressableProps, 'disabled'> {
   label?: string;
+  icon?: React.ReactNode;
   loading?: boolean;
   className?: string;
   textClassName?: string;
@@ -96,6 +102,7 @@ export const Button = React.forwardRef<View, Props>(
   (
     {
       label: text,
+      icon = null,
       loading = false,
       variant = 'default',
       disabled = false,
@@ -131,12 +138,17 @@ export const Button = React.forwardRef<View, Props>(
                 testID={testID ? `${testID}-activity-indicator` : undefined}
               />
             ) : (
-              <Text
-                testID={testID ? `${testID}-label` : undefined}
-                className={styles.label({ className: textClassName })}
-              >
-                {text}
-              </Text>
+              <ViewBase className="flex-row items-center gap-2">
+                {icon && <Text>{icon}</Text>}
+                {text && (
+                  <Text
+                    testID={testID ? `${testID}-label` : undefined}
+                    className={styles.label({ className: textClassName })}
+                  >
+                    {text}
+                  </Text>
+                )}
+              </ViewBase>
             )}
           </>
         )}

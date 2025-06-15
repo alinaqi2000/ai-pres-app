@@ -20,3 +20,20 @@ export const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
 
   return store;
 };
+
+export const getFloorSuffix = (number: number): string => {
+  if (number === 0) return 'Basement';
+  if (number === 1) return 'Ground Floor';
+
+  const lastDigit = number % 10;
+  if (lastDigit === 1) return `${number}st Floor`;
+  if (lastDigit === 2) return `${number}nd Floor`;
+  if (lastDigit === 3) return `${number}rd Floor`;
+  return `${number}th Floor`;
+};
+
+export const toTitleCase = (str: string) =>
+  str.replace(
+    /\w\S*/g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
+  );

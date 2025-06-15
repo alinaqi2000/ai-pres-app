@@ -1,202 +1,106 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Avatar } from 'react-native-paper';
 
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { PropertySetting, TenantRequest, Tenants } from '@/components/ui/icons';
+import { useAuth } from '@/lib';
+
+import { Logo } from '../logo';
+import { colors } from '../ui';
 
 interface DashboardCardProps {
   title: string;
-  icon: string;
+  icon: React.ReactNode;
   count?: number;
   onPress?: () => void;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
   title,
-  // eslint-disable-next-line unused-imports/no-unused-vars
   icon,
-  count,
   onPress,
 }) => (
-  <Card style={styles.card}>
-    <View style={styles.cardContent}>
-      <View style={styles.cardHeader}>
-        <Text className="text-xl font-bold">{title}</Text>
-        {count !== undefined && (
-          <Text className="text-xl font-bold">{count}</Text>
-        )}
+  <Card className="max-w-40% rounded-lg border-2 border-primary-100/25 bg-primary-50/25 dark:border-gray-50/5 dark:bg-gray-50/5">
+    <TouchableOpacity onPress={onPress}>
+      <View className="p-4">
+        <View className="max-w-50% flex-col items-center justify-between gap-3">
+          {icon}
+          <Text className="text-sm font-semibold text-gray-500 dark:text-gray-200">
+            {title}
+          </Text>
+        </View>
       </View>
-      <Button onPress={onPress} style={styles.cardButton}>
-        <Text className="text-xl font-bold">View Details</Text>
-      </Button>
-    </View>
+    </TouchableOpacity>
   </Card>
 );
 
+const getTimeBasedGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour >= 4 && hour < 12) return 'Good Morning!';
+  if (hour >= 12 && hour < 17) return 'Good Afternoon!';
+  return 'Good Evening!';
+};
+
 // eslint-disable-next-line max-lines-per-function
 export function OwnerDashboard() {
+  const user = useAuth.use.user();
+  const router = useRouter();
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView className="flex-1 px-4">
+      <View className="items-center justify-center">
+        <Logo />
+      </View>
       {/* Greeting Section */}
-      <View style={styles.greetingContainer}>
-        <View style={styles.greetingContent}>
-          <Avatar.Text size={48} label="O" />
-          <View>
-            <Text
-              className="text-2xl font-bold text-gray-900 dark:text-gray-100"
-              style={styles.greetingText}
-            >
-              Good Morning!
+      <View className="items-center justify-center px-3">
+        <View className="flex-row items-center">
+          <Avatar.Text
+            className="border-2 border-primary-300"
+            style={{ backgroundColor: colors.primary[50] }}
+            labelStyle={{
+              color: colors.primary[900],
+              fontWeight: '700',
+              marginTop: -3,
+            }}
+            label={user?.name?.[0] || 'S'}
+            size={48}
+          />
+          <View className="ml-4">
+            <Text className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              {getTimeBasedGreeting()}
             </Text>
             <Text className="text-gray-500 dark:text-gray-400">
-              Welcome back, Owner
+              Welcome back, {user?.name}
             </Text>
           </View>
         </View>
       </View>
       {/* Quick Actions */}
-      <View style={styles.quickActionsContainer}>
-        <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Quick Actions
-        </Text>
-        <View style={styles.cardsContainer}>
+      <View className="my-12">
+        <View className="flex-row flex-wrap justify-evenly gap-6">
           <DashboardCard
             title="Manage Properties"
-            icon="🏠"
-            count={5}
-            onPress={() => { }}
+            icon={<PropertySetting width={100} height={100} />}
+            onPress={() => router.push('/properties')}
           />
           <DashboardCard
             title="Tenant Requests"
-            icon="📨"
-            count={3}
-            onPress={() => { }}
+            icon={<TenantRequest width={100} height={100} />}
+            onPress={() => router.push('/tenant-requests')}
           />
           <DashboardCard
             title="Manage Tenants"
-            icon="👥"
-            count={12}
-            onPress={() => { }}
+            icon={<Tenants width={100} height={100} />}
+            onPress={() => router.push('/tenants')}
           />
           <DashboardCard
-            title="Expenses"
-            icon="💰"
-            count={8}
-            onPress={() => { }}
+            title="Bookings"
+            icon={<PropertySetting width={100} height={100} />}
+            onPress={() => router.push('/bookings/owner')}
           />
         </View>
-      </View>
-      {/* Recent Activity */}
-      <View style={styles.recentActivityContainer}>
-        <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Recent Activity
-        </Text>
-        <Card style={styles.activityCard}>
-          <Text style={styles.activityText}>
-            Check your latest property updates and tenant interactions
-          </Text>
-        </Card>
-      </View>
-      {/* Financial Overview */}
-      <View style={styles.financialContainer}>
-        <Text className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Financial Overview
-        </Text>
-        <Card style={styles.financialCard}>
-          <View style={styles.financialContent}>
-            <Text style={styles.financialAmount}>$12,500</Text>
-            <Text style={styles.financialGrowth}>+15% from last month</Text>
-          </View>
-        </Card>
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  greetingContainer: {
-    marginBottom: 24,
-  },
-  greetingContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatar: {
-    marginRight: 16,
-  },
-  greetingText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  welcomeText: {
-    // color: colors.charcoal[50],
-  },
-  quickActionsContainer: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  cardsContainer: {
-    flexWrap: 'wrap',
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: 1,
-    gap: 1,
-  },
-  card: {
-    flex: 1,
-    minWidth: '40%',
-  },
-  cardContent: {
-    padding: 16,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  cardCount: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  cardButton: {
-    width: '100%',
-  },
-  recentActivityContainer: {
-    marginBottom: 24,
-  },
-  activityCard: {
-    padding: 16,
-  },
-  activityText: {
-    // color: colors.charcoal[50],
-  },
-  financialContainer: {},
-  financialCard: {
-    padding: 16,
-  },
-  financialContent: {
-    alignItems: 'center',
-  },
-  financialAmount: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    // color: colors.charcoal[50],
-  },
-  financialGrowth: {
-    // color: colors.charcoal[50],
-    marginTop: 8,
-  },
-});

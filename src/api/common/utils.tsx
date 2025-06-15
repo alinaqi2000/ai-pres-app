@@ -2,8 +2,14 @@ import type {
   GetNextPageParamFunction,
   GetPreviousPageParamFunction,
 } from '@tanstack/react-query';
+import { type AxiosError } from 'axios';
+import { type Router } from 'expo-router';
+
+// eslint-disable-next-line import/no-cycle
+import { showErrorMessage } from '@/components/ui';
 
 import type { PaginateQuery } from '../types';
+import { type ErrorResponse } from './types';
 
 type KeyParams = {
   [key: string]: any;
@@ -49,3 +55,25 @@ export const getNextPageParam: GetPreviousPageParamFunction<
   unknown,
   PaginateQuery<unknown>
 > = (page) => getUrlParameters(page.next)?.offset ?? null;
+
+export const handleError = (
+  error: AxiosError<ErrorResponse>,
+  router: Router | null = null
+) => {
+  console.log('====================================');
+  console.log(error.toJSON());
+  console.log('====================================');
+  switch (error.response?.status) {
+    case 401:
+      return router?.replace('/login');
+    case 422:
+      return showErrorMessage(error.response?.data.message);
+    default:
+      if (error.response?.data.message) {
+        return showErrorMessage(error.response?.data.message);
+      }
+      break;
+  }
+
+  return showErrorMessage('Something went wrong');
+};

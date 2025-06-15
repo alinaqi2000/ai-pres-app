@@ -4,7 +4,13 @@ export type User = {
   city: string;
   email: string;
   role: Role;
+  phone: string | null;
+  cnic: string | null;
+  gender: Gender;
+  nature_of_business: string | null;
 };
+
+export type Gender = 'Male' | 'Female';
 
 export type Role = 'tenant' | 'owner' | 'admin';
 

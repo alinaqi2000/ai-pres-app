@@ -145,7 +145,7 @@ export interface SelectProps {
 }
 interface ControlledSelectProps<T extends FieldValues>
   extends SelectProps,
-    InputControllerType<T> {}
+  InputControllerType<T> { }
 
 export const Select = (props: SelectProps) => {
   const {

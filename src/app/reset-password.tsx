@@ -4,11 +4,16 @@ import React from 'react';
 import { useForgotPassword } from '@/api/auth';
 import type { ResetPasswordFormProps } from '@/components/auth/reset-password-form';
 import { ResetPasswordForm } from '@/components/auth/reset-password-form';
-import { FocusAwareStatusBar, showErrorMessage, showSuccessMessage } from '@/components/ui';
+import {
+  FocusAwareStatusBar,
+  showErrorMessage,
+  showSuccessMessage,
+} from '@/components/ui';
 
 export default function ForgotPassword() {
   const router = useRouter();
-  const { mutate: forgotPasswordMutation, isPending: forgotPasswordPending } = useForgotPassword();
+  const { mutate: forgotPasswordMutation, isPending: forgotPasswordPending } =
+    useForgotPassword();
 
   const onSubmit: ResetPasswordFormProps['onSubmit'] = (data) => {
     forgotPasswordMutation(
@@ -29,7 +34,10 @@ export default function ForgotPassword() {
   return (
     <>
       <FocusAwareStatusBar />
-      <ResetPasswordForm onSubmit={onSubmit} isLoading={forgotPasswordPending} />
+      <ResetPasswordForm
+        onSubmit={onSubmit}
+        isLoading={forgotPasswordPending}
+      />
     </>
   );
 }
