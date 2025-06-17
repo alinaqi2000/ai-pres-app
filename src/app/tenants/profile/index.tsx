@@ -102,7 +102,7 @@ const Invoices = ({ tenantId }: { tenantId: number }) => {
     <FlatList
       data={invoices}
       renderItem={({ item }) => (
-        <InvoiceCard invoice={item} user={item.booking.tenant as Tenant} />
+        <InvoiceCard invoice={item} user={item.tenant as Tenant} />
       )}
     />
   );

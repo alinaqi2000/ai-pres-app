@@ -16,6 +16,19 @@ export const useMyInvoices = createQuery<Response, void, AxiosError>({
   },
 });
 
+export const useGetInvoice = createQuery<
+  Invoice,
+  { invoiceId: number },
+  AxiosError
+>({
+  queryKey: ['invoices'],
+  fetcher: async ({ invoiceId }) => {
+    return client
+      .get(`invoices/${invoiceId}`)
+      .then((response) => response.data.data);
+  },
+});
+
 export const useTenantInvoices = createQuery<
   Response,
   { tenantId: number },

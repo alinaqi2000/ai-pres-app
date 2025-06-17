@@ -4,7 +4,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { Avatar, Chip, Icon, List, Text } from 'react-native-paper';
 
 import { toTitleCase } from '@/lib';
-import { setCurrentInvoice } from '@/lib/store/invoices';
+import { setCurrentInvoice, setCurrentInvoiceMode } from '@/lib/store/invoices';
 import { type Owner } from '@/models';
 import { type Tenant } from '@/models/booking';
 import { type Invoice } from '@/models/invoice';
@@ -14,9 +14,10 @@ import colors from './colors';
 type InvoiceCardProps = {
   invoice: Invoice;
   user: Owner | Tenant;
+  tenantMode?: boolean;
 };
 
-export function InvoiceCard({ invoice, user }: InvoiceCardProps) {
+export function InvoiceCard({ invoice, user, tenantMode }: InvoiceCardProps) {
   const { colorScheme } = useColorScheme();
   const router = useRouter();
 
@@ -94,7 +95,8 @@ export function InvoiceCard({ invoice, user }: InvoiceCardProps) {
         <TouchableOpacity
           onPress={() => {
             setCurrentInvoice(invoice);
-            router.push(`/tenants/invoice/detail`);
+            setCurrentInvoiceMode(tenantMode ? 'tenant' : 'owner');
+            router.push(`/invoices/detail`);
           }}
         >
           <Icon source="chevron-right" size={32} />

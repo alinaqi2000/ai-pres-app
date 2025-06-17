@@ -130,20 +130,14 @@ export default function PropertyDetail() {
             ) : undefined}
             {property.meta?.total_units ? (
               <Chip
-                key="units"
+                key="available units"
                 style={{ backgroundColor: colors.primary[100] }}
                 textStyle={{ color: colors.primary[700] }}
               >
-                {property.meta.total_units} Units
-              </Chip>
-            ) : undefined}
-            {property.meta?.total_unoccupied_units ? (
-              <Chip
-                key="unoccupied"
-                style={{ backgroundColor: colors.primary[100] }}
-                textStyle={{ color: colors.primary[700] }}
-              >
-                {property.meta.total_unoccupied_units} Unoccupied
+                {property.meta?.total_unoccupied_units}/
+                {property.meta.total_units}
+                Available Unit
+                {property.meta?.total_units === 1 ? '' : 's'}
               </Chip>
             ) : undefined}
           </View>

@@ -1,4 +1,6 @@
+import { type Tenant } from './booking';
 import { type MinInvoice } from './invoice';
+import { type Owner } from './property';
 
 export class PaymentMethod {
   constructor(
@@ -17,8 +19,9 @@ export class Payment {
     public invoice: MinInvoice,
     public transaction_id: string,
     public status: string,
-    public payment_date: string,
     public created_at: string,
+    public owner?: Owner,
+    public tenant?: Tenant,
     public payment_method?: PaymentMethod,
     public updated_at?: string
   ) { }

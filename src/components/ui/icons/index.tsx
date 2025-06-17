@@ -12,6 +12,7 @@ export * from './image-plus';
 export * from './invoice-payment';
 export * from './language';
 export * from './no-data';
+export * from './payment-requests';
 export * from './property-setting';
 export * from './rate';
 export * from './search';

@@ -14,6 +14,7 @@ export * from './input';
 export * from './item-card';
 export * from './list';
 export * from './modal';
+export * from './payment-card';
 export * from './progress-bar';
 export * from './property-card';
 export * from './search-bar';

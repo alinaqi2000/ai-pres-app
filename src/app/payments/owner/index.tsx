@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { FlatList, View } from 'react-native';
 
-import { useMyInvoices } from '@/api/invoices/use-invoices';
+import { useOwnerPayments } from '@/api/payments';
 import HeadBar from '@/components/head-bar';
-import { SearchBar } from '@/components/ui';
+import { PaymentCard, SearchBar } from '@/components/ui';
 import { EmptyList } from '@/components/ui';
-import { InvoiceCard } from '@/components/ui/invoice-card';
-import { type Owner } from '@/models';
-import { type Invoice } from '@/models/invoice';
+import { type Tenant } from '@/models/booking';
+import { type Payment } from '@/models/payment';
 
-export default function TenantInvoices() {
-  const { data, refetch, isRefetching } = useMyInvoices();
+export default function OwnerPayments() {
+  const { data, refetch, isRefetching } = useOwnerPayments();
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const filteredData = React.useMemo(() => {
@@ -18,19 +17,22 @@ export default function TenantInvoices() {
 
     const query = searchQuery.toLowerCase();
     return data?.filter(
-      (invoice) =>
-        invoice.reference_number.toLowerCase().includes(query) ||
-        invoice.booking?.unit?.name.toLowerCase().includes(query) ||
-        invoice.booking?.tenant?.name.toLowerCase().includes(query) ||
-        invoice.booking?.total_price?.toString().toLowerCase().includes(query)
+      (payment) =>
+        payment.transaction_id.toLowerCase().includes(query) ||
+        payment.status.toLowerCase().includes(query) ||
+        payment.payment_method?.name.toLowerCase().includes(query) ||
+        payment.invoice.reference_number.toLowerCase().includes(query) ||
+        payment.owner?.name.toLowerCase().includes(query) ||
+        payment.tenant?.name.toLowerCase().includes(query) ||
+        payment.invoice.amount.toString().toLowerCase().includes(query)
     );
   }, [data, searchQuery]);
 
   return (
     <View className="flex-1 gap-6">
-      <HeadBar title="My Invoices" />
+      <HeadBar title="Tenant Payments" />
       <SearchBar
-        placeholder="Search invoices..."
+        placeholder="Search payments..."
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
@@ -39,7 +41,7 @@ export default function TenantInvoices() {
           refreshing={isRefetching}
           onRefresh={refetch}
           data={filteredData}
-          renderItem={({ item, index }: { item: Invoice; index: number }) => {
+          renderItem={({ item, index }: { item: Payment; index: number }) => {
             const isLastItem =
               filteredData && index === filteredData.length - 1;
 
@@ -48,15 +50,11 @@ export default function TenantInvoices() {
                 style={isLastItem ? { marginBottom: 96 } : null}
                 className="ml-6"
               >
-                <InvoiceCard
-                  invoice={item}
-                  user={item.owner as Owner}
-                  tenantMode={true}
-                />
+                <PaymentCard payment={item} user={item.tenant as Tenant} />
               </View>
             );
           }}
-          keyExtractor={(item: Invoice) => item.id.toString()}
+          keyExtractor={(item: Payment) => item.id.toString()}
         />
         {!filteredData?.length && <EmptyList isLoading={isRefetching} />}
       </View>

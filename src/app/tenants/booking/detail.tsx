@@ -35,9 +35,9 @@ export default function BookingDetail() {
     <View className="flex-1 bg-white dark:bg-black">
       <HeadBar title={`Booking Details`} />
 
-      <ScrollView className="mb-4 flex-1 p-6">
+      <ScrollView className="flex-1 py-6 pl-5 pr-4">
         {/* Header Section */}
-        <View className="mb-3 flex-row items-center justify-between">
+        <View className="mb-6 flex-row items-center justify-between">
           <View>
             <View className="flex-row items-center">
               <Icon source="pound" size={16} color={colors.primary[400]} />

@@ -87,10 +87,7 @@ export default function RootLayout() {
           name="tenants/booking/detail"
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="tenants/invoice/detail"
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="invoices/detail" options={{ headerShown: false }} />
         <Stack.Screen
           name="bookings/owner/index"
           options={{ headerShown: false }}
@@ -104,7 +101,20 @@ export default function RootLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="invoices/owner/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="invoices/payment/create"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="payments/detail" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="payments/owner/index"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="payments/tenant/index"
           options={{ headerShown: false }}
         />
         <Stack.Screen

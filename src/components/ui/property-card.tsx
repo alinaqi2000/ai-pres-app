@@ -172,7 +172,9 @@ export function PropertyCard({
             {property.meta?.total_floors && property.meta?.total_floors > 1
               ? 's'
               : ''}{' '}
-            • {property.meta?.total_units} unit
+            •{' '}
+            {mode === 'feed' ? property.meta?.total_unoccupied_units + '/' : ''}
+            {property.meta?.total_units} unit
             {property.meta?.total_units && property.meta?.total_units > 1
               ? 's'
               : ''}

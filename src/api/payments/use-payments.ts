@@ -15,27 +15,27 @@ type Variables = {
 
 type Response = Payment;
 
-// export const useMyPayments = createQuery<Response, void, AxiosError>({
-//   queryKey: ['my-payments'],
-//   fetcher: async () => {
-//     return client
-//       .get(`invoices/my-payments`)
-//       .then((response) => response.data.data);
-//   },
-// });
+export const useOwnerPayments = createQuery<Payment[], void, AxiosError>({
+  queryKey: ['owner-payments'],
+  fetcher: async () => {
+    return client
+      .get(`payments/owner/me`)
+      .then((response) => response.data.data);
+  },
+});
 
-// export const useTenantInvoices = createQuery<
-//   Response,
-//   { tenantId: number },
-//   AxiosError
-// >({
-//   queryKey: ['tenant-invoices'],
-//   fetcher: async ({ tenantId }) => {
-//     return client
-//       .get(`invoices/tenant/${tenantId}/invoices`)
-//       .then((response) => response.data.data);
-//   },
-// });
+export const useGetPayment = createQuery<
+  Payment,
+  { paymentId: number },
+  AxiosError
+>({
+  queryKey: ['get-payment'],
+  fetcher: async ({ paymentId }) => {
+    return client
+      .get(`payments/${paymentId}`)
+      .then((response) => response.data.data);
+  },
+});
 
 export const usePaymentMethods = createQuery<PaymentMethod[], void, AxiosError>(
   {
@@ -57,6 +57,19 @@ export const useAddPayment = createMutation<
     client({
       url: `payments/create_payment`,
       method: 'POST',
+      data: variables,
+    }).then((response) => response.data.data),
+});
+
+export const useUpdatePayment = createMutation<
+  Response,
+  { id: number; variables: { status: string } },
+  AxiosError<ErrorResponse>
+>({
+  mutationFn: async ({ id, variables }) =>
+    client({
+      url: `payments/${id}`,
+      method: 'PATCH',
       data: variables,
     }).then((response) => response.data.data),
 });

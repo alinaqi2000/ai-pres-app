@@ -3,13 +3,14 @@ import * as React from 'react';
 import { ScrollView } from 'react-native';
 import { Chip, Icon, Text } from 'react-native-paper';
 
-import { useGetInvoice } from '@/api/tenants/use-invoices';
+import { useGetInvoice } from '@/api/invoices/use-invoices';
 import HeadBar from '@/components/head-bar';
 import { Button, colors, View } from '@/components/ui';
 import { setCurrentInvoice, useInvoiceStore } from '@/lib/store/invoices';
 
 export default function InvoiceDetail() {
   const router = useRouter();
+  const tenantMode = useInvoiceStore.use.currentInvoiceMode() === 'tenant';
   const { data: invoice, isLoading } = useGetInvoice({
     variables: {
       invoiceId: useInvoiceStore.use.currentInvoice()?.id || 0,
@@ -37,7 +38,7 @@ export default function InvoiceDetail() {
       <HeadBar
         title={`Invoice`}
         right={
-          invoice.status === 'paid' ? null : (
+          invoice.status !== 'paid' && tenantMode ? (
             <Button
               style={{ height: 32 }}
               label="Pay"
@@ -46,13 +47,13 @@ export default function InvoiceDetail() {
                 router.push('/invoices/payment/create');
               }}
             />
-          )
+          ) : null
         }
       />
 
-      <ScrollView className="flex-1 px-4 py-6">
+      <ScrollView className="flex-1 py-6 pl-5 pr-4">
         {/* Header Section */}
-        <View className="mb-3 flex-row items-center justify-between">
+        <View className="mb-6 flex-row items-center justify-between">
           <View>
             <View className="flex-row items-center">
               <Icon source="pound" size={16} color={colors.primary[400]} />
