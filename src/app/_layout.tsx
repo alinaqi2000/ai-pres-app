@@ -10,7 +10,7 @@ import { StyleSheet } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { PaperProvider } from 'react-native-paper';
+import { DefaultTheme, PaperProvider } from 'react-native-paper';
 
 import { APIProvider } from '@/api';
 import { hydrateAuth, loadSelectedTheme } from '@/lib';
@@ -121,6 +121,18 @@ export default function RootLayout() {
           name="feed/property/detail"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="tenants/requests/tenant"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tenants/requests/owner"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="tenants/requests/detail"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="reset-password" options={{ headerShown: false }} />
@@ -148,18 +160,15 @@ function Providers({ children }: { children: React.ReactNode }) {
         <ThemeProvider value={theme}>
           <PaperProvider
             theme={{
+              ...DefaultTheme,
               colors: {
+                ...DefaultTheme.colors,
                 primary: theme.colors.primary,
                 background: theme.colors.background,
                 surface: theme.colors.background,
-                accent: theme.colors.primary,
                 error: theme.colors.primary,
-                text: theme.colors.text,
                 onSurface: theme.colors.text,
-                disabled: theme.colors.border,
-                placeholder: theme.colors.border,
                 backdrop: theme.colors.background,
-                notification: theme.colors.primary,
               },
               dark: theme.dark,
             }}

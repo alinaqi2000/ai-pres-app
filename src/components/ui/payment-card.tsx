@@ -39,7 +39,7 @@ export function PaymentCard({ payment, user, tenantMode }: PaymentCardProps) {
 
   return (
     <List.Item
-      className={`mr-4 mt-3 rounded-lg border ${usePaymentStatusBorder(
+      className={`mr-4 mt-3 rounded-lg border-2 ${usePaymentStatusBorder(
         payment.status
       )}`}
       title={`#${payment.transaction_id} - #INV-${payment.invoice.reference_number}`}

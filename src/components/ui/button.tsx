@@ -38,6 +38,11 @@ const button = tv({
         label: 'text-white',
         indicator: 'text-white',
       },
+      softDestructive: {
+        container: 'border border-red-400 bg-red-50 dark:bg-red-200/20',
+        label: 'text-black dark:text-neutral-100',
+        indicator: 'text-red-500',
+      },
       ghost: {
         container: 'bg-transparent',
         label: 'text-black underline dark:text-white',

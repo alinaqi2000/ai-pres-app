@@ -65,7 +65,7 @@ export const ManageFloorsForm = ({
   }, [editFloors]);
 
   const handleDeleteFloor = (floor: Floor) => {
-    if (floor.units.length > 0) {
+    if (floor.units?.length > 0) {
       Alert.alert(
         'Caution',
         'This floor has units. Please delete the units first.',

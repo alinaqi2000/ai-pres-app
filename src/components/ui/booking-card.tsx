@@ -21,7 +21,7 @@ export function BookingCard({ booking, user }: BookingCardProps) {
 
   return (
     <List.Item
-      className={`mr-4 mt-3 rounded-lg border ${booking.status === 'active' ? 'border-green-300' : 'border-red-300'}`}
+      className={`mr-4 mt-3 rounded-lg border-2 ${booking.status === 'active' ? 'border-green-300' : 'border-red-300'}`}
       title={
         bookingItemType === 'unit'
           ? `#${booking.id} - ${booking.unit?.name}`

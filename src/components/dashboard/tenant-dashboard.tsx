@@ -86,7 +86,7 @@ export function TenantDashboard() {
           <TenantDashboardCard
             title="My Requests"
             icon={<TenantRequest width={100} height={100} />}
-            onPress={() => router.push('/tenant-requests')}
+            onPress={() => router.push('/tenants/requests/tenant')}
           />
           <TenantDashboardCard
             title="Bookings"

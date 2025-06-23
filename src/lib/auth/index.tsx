@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import type { Role, User } from '@/api/auth/types';
+// eslint-disable-next-line import/no-cycle
 import { client } from '@/api/common';
 
 import { createSelectors } from '../utils';

@@ -1,68 +1,47 @@
+// import { useColorScheme } from 'nativewind';
 import { type AxiosError } from 'axios';
 import { useRouter } from 'expo-router';
-import { useColorScheme } from 'nativewind';
 import * as React from 'react';
-import { ScrollView } from 'react-native';
-import { Chip, Dialog, Icon, Text } from 'react-native-paper';
+import { Alert, ScrollView } from 'react-native';
+import { Chip, Icon, Text } from 'react-native-paper';
 
 import { handleError } from '@/api';
 import { type ErrorResponse } from '@/api/common/types';
-import { useCreateTenantRequest } from '@/api/tenants';
-import { useGetBooking } from '@/api/tenants/use-bookings';
+import { useUpdateTenantRequest } from '@/api/owner';
 import HeadBar from '@/components/head-bar';
-import { colors, Input, showSuccessMessage, View } from '@/components/ui';
+import { colors, showSuccessMessage, View } from '@/components/ui';
 import { Button } from '@/components/ui/button';
 import { toTitleCase, useAuth } from '@/lib';
-import { useBookingStore } from '@/lib/store/bookings';
+import { useTenantRequestStore } from '@/lib/store/tenant-requests';
 
-export default function BookingDetail() {
-  const { data: booking, isLoading } = useGetBooking({
-    variables: {
-      bookingId: useBookingStore.use.currentBooking()?.id || 0,
-    },
-  });
-  const { mutate: createTenantRequest, isPending: isCreatePending } =
-    useCreateTenantRequest();
+export default function TenantRequestDetail() {
+  const tenantRequest = useTenantRequestStore.use.currentTenantRequest();
+  const { mutate: updateTenantRequest } = useUpdateTenantRequest();
   const router = useRouter();
 
-  const [visible, setVisible] = React.useState(false);
-  const [message, setMessage] = React.useState('');
-  const hideDialog = () => setVisible(false);
-
   const user = useAuth.use.user();
-  const { colorScheme } = useColorScheme();
+  // const { colorScheme } = useColorScheme();
 
-  if (isLoading) {
+  if (!tenantRequest) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Text>Loading...</Text>
+        <Text>Request not found</Text>
       </View>
     );
   }
 
-  if (!booking) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <Text>Booking not found</Text>
-      </View>
-    );
-  }
-
-  const onCancelBooking = () => {
-    createTenantRequest(
+  const handleAcceptRequest = () => {
+    updateTenantRequest(
       {
         variables: {
-          booking_id: booking.id,
-          type: 'cancellation',
-          message,
+          is_seen: true,
+          status: 'accepted',
         },
+        id: tenantRequest.id,
       },
       {
         onSuccess: () => {
-          showSuccessMessage(
-            'Booking cancellation request sent successfully to the owner'
-          );
-          setVisible(false);
+          showSuccessMessage('Booking has been cancelled successfully');
         },
         onError: (error: AxiosError<ErrorResponse>) =>
           handleError(error, router),
@@ -73,13 +52,29 @@ export default function BookingDetail() {
   return (
     <View className="flex-1 bg-white dark:bg-black">
       <HeadBar
-        title={`Booking Details`}
+        title={`Request Details`}
         right={
-          user?.id === booking.tenant?.id ? (
+          tenantRequest.status === 'pending' &&
+            user?.id === tenantRequest.owner?.id ? (
             <Button
-              variant="softDestructive"
-              label="Cancel Booking"
-              onPress={() => setVisible(true)}
+              label="Accept"
+              onPress={() => {
+                Alert.alert(
+                  'Accept Request',
+                  `Are you sure you want to accept this ${tenantRequest.type} request?`,
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'Accept',
+                      onPress: handleAcceptRequest,
+                    },
+                  ]
+                );
+              }}
             />
           ) : null
         }
@@ -93,11 +88,23 @@ export default function BookingDetail() {
               <Icon source="pound" size={16} color={colors.primary[400]} />
 
               <Text variant="titleMedium" className="text-gray-600">
-                {booking.id}
+                {tenantRequest.id}
+                {' - '}
+              </Text>
+              <Text
+                variant="titleMedium"
+                style={{
+                  color:
+                    tenantRequest.type === 'cancellation'
+                      ? colors.danger[600]
+                      : colors.primary[600],
+                }}
+              >
+                {toTitleCase(tenantRequest.type)}
               </Text>
             </View>
             <Text variant="bodyMedium" className="text-gray-600">
-              {new Date(booking.start_date).toLocaleDateString('en-US', {
+              {new Date(tenantRequest.created_at).toLocaleDateString('en-US', {
                 month: 'long',
                 year: 'numeric',
                 day: 'numeric',
@@ -107,65 +114,74 @@ export default function BookingDetail() {
           <Chip
             style={{
               backgroundColor:
-                booking.status === 'active' ? '#dcfce7' : '#fee2e2',
+                tenantRequest.status === 'accepted' ? '#dcfce7' : '#fee2e2',
             }}
             textStyle={{
-              color: booking.status === 'active' ? '#166534' : '#991b1b',
+              color:
+                tenantRequest.status === 'accepted' ? '#166534' : '#991b1b',
 
               fontSize: 14,
 
               fontWeight: '600',
             }}
           >
-            {toTitleCase(booking.status)}
+            {toTitleCase(tenantRequest.status)}
           </Chip>
         </View>
+        {tenantRequest.message && (
+          <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+            <Text variant="titleMedium">Reason</Text>
+            <Text variant="bodyMedium">{tenantRequest.message}</Text>
+          </View>
+        )}
 
         {/* Property Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
-          <Text variant="titleMedium" className="mb-2 font-semibold">
-            Property Details
-          </Text>
-          <View className="mb-4 flex-row items-start justify-between">
-            <View>
-              <Text variant="bodyMedium" className="font-medium">
-                Property ID
-              </Text>
-              <Text variant="bodyMedium" className="text-gray-600">
-                {booking.property?.property_id || 'N/A'}
-              </Text>
+        {tenantRequest.property && (
+          <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+            <Text variant="titleMedium" className="mb-2 font-semibold">
+              Property Details
+            </Text>
+            <View className="mb-4 flex-row items-start justify-between">
+              <View>
+                <Text variant="bodyMedium" className="font-medium">
+                  Property ID
+                </Text>
+                <Text variant="bodyMedium" className="text-gray-600">
+                  {tenantRequest.property?.property_id || 'N/A'}
+                </Text>
+              </View>
+              <View>
+                <Text variant="bodyMedium" className="font-medium">
+                  Property Name
+                </Text>
+                <Text variant="bodyMedium" className="text-gray-600">
+                  {tenantRequest.property?.name || 'N/A'}
+                </Text>
+              </View>
             </View>
-            <View>
-              <Text variant="bodyMedium" className="font-medium">
-                Property Name
-              </Text>
-              <Text variant="bodyMedium" className="text-gray-600">
-                {booking.property?.name || 'N/A'}
-              </Text>
+            <View className="flex-row items-start justify-between">
+              <View>
+                <Text variant="bodyMedium" className="font-medium">
+                  City
+                </Text>
+                <Text variant="bodyMedium" className="text-gray-600">
+                  {tenantRequest.property?.city || 'N/A'}
+                </Text>
+              </View>
+              <View>
+                <Text variant="bodyMedium" className="font-medium">
+                  Address
+                </Text>
+                <Text variant="bodyMedium" className="text-gray-600">
+                  {tenantRequest.property?.address || 'N/A'}
+                </Text>
+              </View>
             </View>
           </View>
-          <View className="flex-row items-start justify-between">
-            <View>
-              <Text variant="bodyMedium" className="font-medium">
-                City
-              </Text>
-              <Text variant="bodyMedium" className="text-gray-600">
-                {booking.property?.city || 'N/A'}
-              </Text>
-            </View>
-            <View>
-              <Text variant="bodyMedium" className="font-medium">
-                Address
-              </Text>
-              <Text variant="bodyMedium" className="text-gray-600">
-                {booking.property?.address || 'N/A'}
-              </Text>
-            </View>
-          </View>
-        </View>
+        )}
 
         {/* Unit Details (if exists) */}
-        {booking.unit && (
+        {tenantRequest.unit && (
           <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
             <Text variant="titleMedium" className="mb-2 font-semibold">
               Unit Details
@@ -176,7 +192,7 @@ export default function BookingDetail() {
                   Unit Name
                 </Text>
                 <Text variant="bodyMedium" className="text-gray-600">
-                  {booking.unit?.name || 'N/A'}
+                  {tenantRequest.unit?.name || 'N/A'}
                 </Text>
               </View>
               <View>
@@ -184,7 +200,7 @@ export default function BookingDetail() {
                   Floor
                 </Text>
                 <Text variant="bodyMedium" className="text-gray-600">
-                  {booking.floor?.name || 'N/A'}
+                  {tenantRequest.floor?.name || 'N/A'}
                 </Text>
               </View>
             </View>
@@ -202,7 +218,7 @@ export default function BookingDetail() {
                 Name
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {booking.tenant?.name || 'N/A'}
+                {tenantRequest.tenant?.name || 'N/A'}
               </Text>
             </View>
             <View>
@@ -210,7 +226,7 @@ export default function BookingDetail() {
                 Email
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {booking.tenant?.email || 'N/A'}
+                {tenantRequest.tenant?.email || 'N/A'}
               </Text>
             </View>
           </View>
@@ -220,7 +236,7 @@ export default function BookingDetail() {
                 City
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {booking.tenant?.city || 'N/A'}
+                {tenantRequest.tenant?.city || 'N/A'}
               </Text>
             </View>
           </View>
@@ -237,7 +253,7 @@ export default function BookingDetail() {
                 Name
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {booking.owner?.name || 'N/A'}
+                {tenantRequest.owner?.name || 'N/A'}
               </Text>
             </View>
             <View>
@@ -245,7 +261,7 @@ export default function BookingDetail() {
                 Email
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {booking.owner?.email || 'N/A'}
+                {tenantRequest.owner?.email || 'N/A'}
               </Text>
             </View>
           </View>
@@ -255,7 +271,7 @@ export default function BookingDetail() {
                 City
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {booking.owner?.city || 'N/A'}
+                {tenantRequest.owner?.city || 'N/A'}
               </Text>
             </View>
           </View>
@@ -272,24 +288,29 @@ export default function BookingDetail() {
                 Start Date
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {new Date(booking.start_date).toLocaleDateString('en-US', {
+                {new Date(
+                  tenantRequest.booking?.start_date || ''
+                ).toLocaleDateString('en-US', {
                   month: 'long',
                   year: 'numeric',
                   day: 'numeric',
                 })}
               </Text>
             </View>
-            {booking.end_date && (
+            {tenantRequest.booking?.end_date && (
               <View>
                 <Text variant="bodyMedium" className="font-medium">
                   End Date
                 </Text>
                 <Text variant="bodyMedium" className="text-gray-600">
-                  {new Date(booking.end_date).toLocaleDateString('en-US', {
-                    month: 'long',
-                    year: 'numeric',
-                    day: 'numeric',
-                  })}
+                  {new Date(tenantRequest.booking?.end_date).toLocaleDateString(
+                    'en-US',
+                    {
+                      month: 'long',
+                      year: 'numeric',
+                      day: 'numeric',
+                    }
+                  )}
                 </Text>
               </View>
             )}
@@ -301,7 +322,7 @@ export default function BookingDetail() {
                 Monthly Rent
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                Rs{booking.total_price.toLocaleString()}
+                Rs{tenantRequest.booking?.total_price.toLocaleString()}
               </Text>
             </View>
           </View>
@@ -311,49 +332,12 @@ export default function BookingDetail() {
                 Notes
               </Text>
               <Text variant="bodyMedium" className="text-gray-600">
-                {booking.notes || 'N/A'}
+                {tenantRequest.booking?.notes || 'N/A'}
               </Text>
             </View>
           </View>
         </View>
       </ScrollView>
-      <Dialog
-        visible={visible}
-        theme={{
-          colors: {
-            backdrop: 'rgba(0, 0, 0, 0.4)',
-          },
-        }}
-        style={{
-          backgroundColor: colorScheme === 'dark' ? 'black' : 'white',
-        }}
-        onDismiss={hideDialog}
-      >
-        <Dialog.Title>
-          <Text variant="titleMedium">Cancel Booking</Text>
-        </Dialog.Title>
-        <Dialog.Content className="flex-col gap-4">
-          <Text variant="bodyMedium">
-            Are you sure you want to cancel this booking?
-          </Text>
-          <Input
-            multiline
-            value={message}
-            onChangeText={setMessage}
-            numberOfLines={6}
-            placeholder="Please note the reason for cancellation"
-          />
-          <Dialog.Actions>
-            <Button variant="outline" onPress={hideDialog} label="Cancel" />
-            <Button
-              loading={isCreatePending}
-              variant="destructive"
-              onPress={onCancelBooking}
-              label="Cancel Booking"
-            />
-          </Dialog.Actions>
-        </Dialog.Content>
-      </Dialog>
     </View>
   );
 }
