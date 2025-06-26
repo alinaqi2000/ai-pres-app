@@ -84,7 +84,7 @@ export default function InvoiceDetail() {
         </View>
 
         {/* Property Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Property Details
           </Text>
@@ -127,7 +127,7 @@ export default function InvoiceDetail() {
         </View>
 
         {/* Booking Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Booking Details
           </Text>
@@ -168,7 +168,7 @@ export default function InvoiceDetail() {
         </View>
 
         {/* Tenant Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Tenant Information
           </Text>
@@ -209,7 +209,7 @@ export default function InvoiceDetail() {
         </View>
 
         {/* Payment Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Payment Details
           </Text>

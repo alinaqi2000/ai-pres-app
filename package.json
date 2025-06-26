@@ -73,6 +73,7 @@
     "react-hook-form": "^7.53.0",
     "react-i18next": "^15.0.1",
     "react-native": "0.76.6",
+    "react-native-circular-progress": "^1.4.1",
     "react-native-date-picker": "^5.0.12",
     "react-native-edge-to-edge": "^1.1.2",
     "react-native-flash-message": "^0.4.2",

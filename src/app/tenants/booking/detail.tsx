@@ -122,7 +122,7 @@ export default function BookingDetail() {
         </View>
 
         {/* Property Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Property Details
           </Text>
@@ -166,7 +166,7 @@ export default function BookingDetail() {
 
         {/* Unit Details (if exists) */}
         {booking.unit && (
-          <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+          <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
             <Text variant="titleMedium" className="mb-2 font-semibold">
               Unit Details
             </Text>
@@ -192,7 +192,7 @@ export default function BookingDetail() {
         )}
 
         {/* Tenant Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Tenant Information
           </Text>
@@ -227,7 +227,7 @@ export default function BookingDetail() {
         </View>
 
         {/* Owner Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Owner Information
           </Text>
@@ -262,7 +262,7 @@ export default function BookingDetail() {
         </View>
 
         {/* Booking Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-gray-900">
+        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
           <Text variant="titleMedium" className="mb-2 font-semibold">
             Booking Details
           </Text>

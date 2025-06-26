@@ -28,7 +28,8 @@ export default function CreatePayment() {
         // eslint-disable-next-line unused-imports/no-unused-vars
         onSuccess: (payment: Payment) => {
           showSuccessMessage(
-            'Payment added successfully. The owner will be notified. The status will be changed to Paid after payment confirmation.'
+            'Payment added successfully. The owner will be notified. The status will be changed to Paid after payment confirmation.',
+            15000
           );
           router.back();
         },

@@ -37,3 +37,16 @@ export const toTitleCase = (str: string) =>
     /\w\S*/g,
     (txt) => txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
   );
+
+/**
+ * Format a number as currency with $ symbol
+ * @param amount - The amount to format
+ * @param currency - The currency symbol (default: $)
+ * @returns Formatted currency string
+ */
+export const formatCurrency = (amount: number, currency = 'Rs'): string => {
+  return `${currency}${amount.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+};

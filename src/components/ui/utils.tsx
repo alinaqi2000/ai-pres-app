@@ -32,12 +32,15 @@ export const showErrorMessage = (message: string = 'Something went wrong ') => {
   });
 };
 
-export const showSuccessMessage = (message: string = 'Success') => {
+export const showSuccessMessage = (
+  message: string = 'Success',
+  duration: number = 4000
+) => {
   showMessage({
     message,
     type: 'success',
     position: 'bottom',
-    duration: 4000,
+    duration,
     icon: 'success',
   });
 };
