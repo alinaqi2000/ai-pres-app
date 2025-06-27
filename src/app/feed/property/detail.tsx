@@ -43,11 +43,15 @@ export default function PropertyDetail() {
 
       {/* Image Gallery */}
       <View className="relative mt-4">
-        <RNImage
-          source={{ uri: property.thumbnail?.image_url }}
-          style={styles.mainImage}
-          resizeMode="cover"
-        />
+        {property.thumbnail ? (
+          <RNImage
+            source={{ uri: property.thumbnail?.image_url }}
+            style={styles.mainImage}
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="h-32 bg-gray-200" />
+        )}
         <View className="absolute inset-x-4 bottom-4 flex-row items-center justify-between">
           {/* <Chip
             style={{
@@ -186,7 +190,7 @@ export default function PropertyDetail() {
           <Button
             mode="contained"
             onPress={() => {
-              // TODO: Implement booking logic
+              router.push('/bookings/tenant/create-booking-request');
             }}
             className="rounded-lg"
           >

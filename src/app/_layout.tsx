@@ -97,6 +97,10 @@ export default function RootLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="bookings/tenant/create-booking-request"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="invoices/tenant/index"
           options={{ headerShown: false }}
         />

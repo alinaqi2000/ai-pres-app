@@ -11,7 +11,7 @@ import { useUpdateTenantRequest } from '@/api/owner';
 import HeadBar from '@/components/head-bar';
 import { colors, showSuccessMessage, View } from '@/components/ui';
 import { Button } from '@/components/ui/button';
-import { toTitleCase, useAuth } from '@/lib';
+import { formatCurrency, toTitleCase, useAuth } from '@/lib';
 import { useTenantRequestStore } from '@/lib/store/tenant-requests';
 
 export default function TenantRequestDetail() {
@@ -20,7 +20,6 @@ export default function TenantRequestDetail() {
   const router = useRouter();
 
   const user = useAuth.use.user();
-  // const { colorScheme } = useColorScheme();
 
   if (!tenantRequest) {
     return (
@@ -41,7 +40,13 @@ export default function TenantRequestDetail() {
       },
       {
         onSuccess: () => {
-          showSuccessMessage('Booking has been cancelled successfully');
+          if (tenantRequest.type == 'booking') {
+            showSuccessMessage(
+              'Booking request has been accepted successfully'
+            );
+          } else {
+            showSuccessMessage('Booking has been cancelled successfully');
+          }
         },
         onError: (error: AxiosError<ErrorResponse>) =>
           handleError(error, router),
@@ -104,11 +109,22 @@ export default function TenantRequestDetail() {
               </Text>
             </View>
             <Text variant="bodyMedium" className="text-gray-600">
-              {new Date(tenantRequest.created_at).toLocaleDateString('en-US', {
-                month: 'long',
-                year: 'numeric',
-                day: 'numeric',
-              })}
+              {tenantRequest.monthly_offer ? (
+                <Text variant="bodyMedium" className="text-gray-600">
+                  Offered {formatCurrency(tenantRequest.monthly_offer)}
+                </Text>
+              ) : (
+                <Text variant="bodyMedium" className="text-gray-600">
+                  {new Date(tenantRequest.created_at).toLocaleDateString(
+                    'en-US',
+                    {
+                      month: 'long',
+                      year: 'numeric',
+                      day: 'numeric',
+                    }
+                  )}
+                </Text>
+              )}
             </Text>
           </View>
           <Chip
@@ -128,9 +144,21 @@ export default function TenantRequestDetail() {
             {toTitleCase(tenantRequest.status)}
           </Chip>
         </View>
+        {tenantRequest.start_date && (
+          <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
+            <Text variant="bodyMedium" className="text-gray-600">
+              Starting from{' '}
+              {new Date(tenantRequest.start_date).toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric',
+                day: 'numeric',
+              })}
+            </Text>
+          </View>
+        )}
         {tenantRequest.message && (
           <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
-            <Text variant="titleMedium">Reason</Text>
+            <Text variant="titleMedium">Message</Text>
             <Text variant="bodyMedium">{tenantRequest.message}</Text>
           </View>
         )}
@@ -278,65 +306,66 @@ export default function TenantRequestDetail() {
         </View>
 
         {/* Booking Details */}
-        <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
-          <Text variant="titleMedium" className="mb-2 font-semibold">
-            Booking Details
-          </Text>
-          <View className="mb-4 flex-row items-start justify-between">
-            <View>
-              <Text variant="bodyMedium" className="font-medium">
-                Start Date
-              </Text>
-              <Text variant="bodyMedium" className="text-gray-600">
-                {new Date(
-                  tenantRequest.booking?.start_date || ''
-                ).toLocaleDateString('en-US', {
-                  month: 'long',
-                  year: 'numeric',
-                  day: 'numeric',
-                })}
-              </Text>
-            </View>
-            {tenantRequest.booking?.end_date && (
+        {tenantRequest.booking && (
+          <View className="mb-3 rounded-lg bg-gray-50 p-4 dark:bg-charcoal-900">
+            <Text variant="titleMedium" className="mb-2 font-semibold">
+              Booking Details
+            </Text>
+            <View className="mb-4 flex-row items-start justify-between">
               <View>
                 <Text variant="bodyMedium" className="font-medium">
-                  End Date
+                  Start Date
                 </Text>
                 <Text variant="bodyMedium" className="text-gray-600">
-                  {new Date(tenantRequest.booking?.end_date).toLocaleDateString(
-                    'en-US',
-                    {
+                  {new Date(
+                    tenantRequest.booking?.start_date || ''
+                  ).toLocaleDateString('en-US', {
+                    month: 'long',
+                    year: 'numeric',
+                    day: 'numeric',
+                  })}
+                </Text>
+              </View>
+              {tenantRequest.booking?.end_date && (
+                <View>
+                  <Text variant="bodyMedium" className="font-medium">
+                    End Date
+                  </Text>
+                  <Text variant="bodyMedium" className="text-gray-600">
+                    {new Date(
+                      tenantRequest.booking?.end_date
+                    ).toLocaleDateString('en-US', {
                       month: 'long',
                       year: 'numeric',
                       day: 'numeric',
-                    }
-                  )}
+                    })}
+                  </Text>
+                </View>
+              )}
+            </View>
+
+            <View className="flex-row items-start justify-between">
+              <View>
+                <Text variant="bodyMedium" className="font-medium">
+                  Monthly Rent
+                </Text>
+                <Text variant="bodyMedium" className="text-gray-600">
+                  Rs{tenantRequest.booking?.total_price.toLocaleString()}
                 </Text>
               </View>
-            )}
-          </View>
-
-          <View className="flex-row items-start justify-between">
-            <View>
-              <Text variant="bodyMedium" className="font-medium">
-                Monthly Rent
-              </Text>
-              <Text variant="bodyMedium" className="text-gray-600">
-                Rs{tenantRequest.booking?.total_price.toLocaleString()}
-              </Text>
+            </View>
+            <View className="mt-4 flex-row items-start justify-between">
+              <View>
+                <Text variant="bodyMedium" className="font-medium">
+                  Notes
+                </Text>
+                <Text variant="bodyMedium" className="text-gray-600">
+                  {tenantRequest.booking?.notes || 'N/A'}
+                </Text>
+              </View>
             </View>
           </View>
-          <View className="mt-4 flex-row items-start justify-between">
-            <View>
-              <Text variant="bodyMedium" className="font-medium">
-                Notes
-              </Text>
-              <Text variant="bodyMedium" className="text-gray-600">
-                {tenantRequest.booking?.notes || 'N/A'}
-              </Text>
-            </View>
-          </View>
-        </View>
+        )}
       </ScrollView>
     </View>
   );

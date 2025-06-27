@@ -63,7 +63,6 @@ export function TenantDashboard() {
         <RefreshControl refreshing={isLoading} onRefresh={refetch} />
       }
     >
-      {' '}
       <View className="mt-4 flex-row items-center justify-between px-3">
         <View className="flex-row items-center">
           <Avatar.Text

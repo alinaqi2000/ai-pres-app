@@ -22,6 +22,8 @@ export class TenantRequest {
     public type: 'cancellation' | 'booking' | 'maintenance',
     public is_seen: boolean,
     public created_at: string,
+    public monthly_offer: number | null,
+    public start_date: string | null,
     public message: string | null,
     public updated_at: string | null,
     public property: Property | null,

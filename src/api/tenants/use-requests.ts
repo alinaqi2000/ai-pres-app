@@ -6,11 +6,14 @@ import { type TenantRequest } from '@/models/tenant-request';
 import { client } from '../common';
 import { type ErrorResponse } from '../common/types';
 
-type Variables = {
+export type TenantRequestSchema = {
   booking_id?: number;
   floor_id?: number;
+  property_id?: number;
   unit_id?: number;
   message?: string;
+  monthly_offer?: number;
+  start_date?: string;
   type: 'cancellation' | 'booking' | 'maintenance';
 };
 
@@ -42,7 +45,7 @@ export const useTenantBookingRequests = createQuery<Response, void, AxiosError>(
 
 export const useCreateTenantRequest = createMutation<
   Response,
-  { variables: Variables },
+  { variables: TenantRequestSchema },
   AxiosError<ErrorResponse>
 >({
   mutationFn: async ({ variables }) =>
